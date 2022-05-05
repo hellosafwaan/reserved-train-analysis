@@ -17,7 +17,7 @@ def journey_details(train_num, station_name, j_date) -> None:
     station.send_keys(Keys.RETURN)
     select_date(j_date)
     driver.find_element(By.XPATH, xpaths['train_chart_button']).click()
-    
+
 def select_date(journey_date) -> None:
     journey_day = journey_date[8:10]
     if journey_day[0] == '0':
@@ -28,3 +28,10 @@ def select_date(journey_date) -> None:
         if d_elem.text == journey_day and d_elem.get_attribute('tabindex') == '0':
             d_elem.click()
             break
+
+def get_headers() -> list:
+    headers = []
+    for i in range(1, 6):
+        th = driver.find_element(By.XPATH, xpaths['headers_data'].format(i))
+        headers.append(th.text)
+    return headers
