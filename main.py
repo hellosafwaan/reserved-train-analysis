@@ -35,3 +35,17 @@ def get_headers() -> list:
         th = driver.find_element(By.XPATH, xpaths['headers_data'].format(i))
         headers.append(th.text)
     return headers
+
+def pages_and_rows() -> tuple:
+    n = int(driver.find_element(By.XPATH, xpaths['page_details']).text.split(" ")[-1])
+    if (n / 10 <= 1):
+        total_pages = 1
+        last_page_rows = n
+    else:
+        if n / 10 > n // 10:
+            total_pages = (n // 10) + 1
+            last_page_rows = n % 10
+        else:
+            total_pages = n // 10
+            last_page_rows = 10
+    return (total_pages, last_page_rows)
