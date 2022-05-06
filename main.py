@@ -49,3 +49,13 @@ def pages_and_rows() -> tuple:
             total_pages = n // 10
             last_page_rows = 10
     return (total_pages, last_page_rows)
+
+def collect_page(no_of_rows) -> list:
+    page_data = []
+    for j in range(2, no_of_rows + 2):
+        row = []
+        for k in range(1,6):
+            td = driver.find_element(By.XPATH, xpaths['tableData'].format(j, k))
+            row.append(td.text)
+        page_data.append(row)
+    return page_data
