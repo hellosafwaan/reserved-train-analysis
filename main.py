@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+import pandas as pd
 from xpaths import xpaths
 
 PATH = "C:\Program Files (x86)\chromedriver.exe"
@@ -59,3 +60,18 @@ def collect_page(no_of_rows) -> list:
             row.append(td.text)
         page_data.append(row)
     return page_data
+
+def collect_coach_data(coach_name) -> None:
+    driver.find_element(By.XPATH, xpaths['coach_sort_button']).click()
+    total_pages, last_page_rows = pages_and_rows()
+    coach_data = []
+    current_page = 1
+    for i in range(total_pages):
+        if (current_page == total_pages):
+            coach_data += collect_page(last_page_rows)
+        else:
+            coach_data += collect_page(10)    
+            nextPage = driver.find_element(By.XPATH, xpaths['next_page_button'])
+            driver.execute_script('arguments[0].click()', nextPage)
+        current_page += 1
+    pd.DataFrame(coach_data, columns= get_headers()).to_csv("{}.csv".format(coach_name), index = False)
