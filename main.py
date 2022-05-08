@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import pandas as pd
 from xpaths import xpaths
+from datetime import date
 
 PATH = "C:\Program Files (x86)\chromedriver.exe"
 s = Service(PATH)
@@ -75,3 +76,17 @@ def collect_coach_data(coach_name) -> None:
             driver.execute_script('arguments[0].click()', nextPage)
         current_page += 1
     pd.DataFrame(coach_data, columns= get_headers()).to_csv("{}.csv".format(coach_name), index = False)
+
+def collect_vacant_berth_details() -> None:
+    coach_names_elements = driver.find_elements(By.XPATH, '/html/body/div[1]/div/div/div[2]/div/div/div/div[1]/div/div/table/thead/tr[2]/th')
+    coaches = []
+    for coach_name_WebElem in coach_names_elements:
+        coaches.append(coach_name_WebElem.text)
+    vacany_details = [str(date.today())]
+    for i in range(len(coaches)):
+        coach_button = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/div/div/div/div[1]/div/div/table/tbody/tr/td[{}]'.format(i + 1))
+        vacany_details.append(coach_button.text)
+        coach_button.click()
+        collect_coach_data(coaches[i])
+        driver.find_element(By.XPATH, xpaths['backButton']).click()
+    print(vacany_details)
