@@ -90,3 +90,14 @@ def collect_vacant_berth_details() -> None:
         collect_coach_data(coaches[i])
         driver.find_element(By.XPATH, xpaths['backButton']).click()
     print(vacany_details)
+
+def main():
+    driver.get("https://www.irctc.co.in/online-charts/")
+    driver.implicitly_wait(60)
+    journey_details("12694", "TUTICORIN (TN)", '2022-02-25')
+    collect_vacant_berth_details() 
+    driver.quit()
+
+if __name__ == '__main__':
+    main()
+    
