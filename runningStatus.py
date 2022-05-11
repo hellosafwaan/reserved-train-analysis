@@ -25,3 +25,12 @@ def train_details(train_num):
         prev_day.click()
     except StaleElementReferenceException as e:
         prev_day = driver.find_element(By.ID, "jYesterday").click()
+
+def switch_window():
+    #RunningStatus
+    driver.find_element(By.XPATH, '/html/body/div[1]/div/div[4]/table[2]/tbody/tr/td[1]/input[1]').click()
+    #Switch Window
+    windows = driver.window_handles
+    for sub_window in windows:
+        if sub_window != parent_window:
+            driver.switch_to.window(sub_window)
