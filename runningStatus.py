@@ -34,3 +34,25 @@ def switch_window():
     for sub_window in windows:
         if sub_window != parent_window:
             driver.switch_to.window(sub_window)
+
+def collect_data(train_num):
+    div_count = len(driver.find_elements(By.XPATH,'html/body/div/div/div/div/div/div/div'))
+    base = 'html/body/div/div/div/div/div/div/div[{}]/div[{}]'
+    data = []
+    for x in range(3, div_count + 1):
+        row = []
+        for y in range(1, 3):
+            if y == 1:
+                for  i in range(1, 3):
+                    row += [driver.find_element(By.XPATH, base.format(x,y) + '/span[{}]'.format(i)).text.strip()]
+            else:
+                for a in range(1,3):
+                    if a == 1:
+                        row += [driver.find_element(By.XPATH, base.format(x,y) + '/div[{}]/span'.format(a)).text.replace('\n', ' ')]
+                    else:
+                        for b in range(1, 3):
+                            row += [driver.find_element(By.XPATH, base.format(x,y) + '/div[{}]/span[{}]'.format(a,b)).text.strip()]
+        data += [row]
+    pd.DataFrame(
+        data, columns= ["Scheduled Arrival" ,"Actual Arrival", "Station" ,"Scheduled Departure", "Actual Departure"]
+        ).to_csv("{}.csv".format(train_num + '-' + '2022-02-04' + '-' + 'runningStatus' ), index = False)
