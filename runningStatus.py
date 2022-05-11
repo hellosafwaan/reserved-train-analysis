@@ -56,3 +56,9 @@ def collect_data(train_num):
     pd.DataFrame(
         data, columns= ["Scheduled Arrival" ,"Actual Arrival", "Station" ,"Scheduled Departure", "Actual Departure"]
         ).to_csv("{}.csv".format(train_num + '-' + '2022-02-04' + '-' + 'runningStatus' ), index = False)
+
+def scrape_running_status():
+    train_num = '12693'
+    train_details(train_num)
+    switch_window()
+    collect_data(train_num)
